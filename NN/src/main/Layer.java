@@ -10,134 +10,188 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Layer 
+public class Layer
 {
-	int networkid = 3;
-	int layerid;
-	char type;
-	int amount;
-	ArrayList<Double> inl = new ArrayList<Double>();
-	ArrayList<Double> outl = new ArrayList<Double>();
-	List<Node> Nodes = new ArrayList<Node>();
-	Path nk, layerp;
-	Layer(int id, char t, int a)
+	private int layerid, amount;
+	private char type;
+	private Network parent;
+	private Layer in, out;
+	private List<Node> Nodes = new ArrayList<Node>();
+	private Path layerp, from;
+	Layer(int id, char t, int a, Network p)
 	{
 		layerid = id;
 		type = t;
 		amount = a;
-		proccessIN();
-		createNode(type, amount);
-		getOutValues();
-		appendIO();
-		writeValueFile(layerid);
-	}
-	Layer(int id, char t, int a, Path n)
-	{
-		layerid = id;
-		type = t;
-		amount = a;
-		nk = n;
+		parent = p;
 		
-		proccessIN();
-		getLayerPath(nk);
-		createNode(type, amount, layerp);
-		getOutValues();
-		appendIO();
+	}
+	Layer(int id, char t, int a,  Network p, Path f)
+	{
+		layerid = id;
+		type = t;
+		amount = a;
+		parent = p;
+		from = f;
+		
+	}
+	public void init()
+	{
+		initFolders();
+		getIn();
+		getOut();
+		
+		getLayerPath();
+	}
+	public void run(double[] orgin)
+	{
+		createNode(amount);
+		if(type != 'I')
+		{
+			passNodesIn(in.getNodesOut());
+		}
+		else
+		{
+			inputNetworkValues(orgin);
+		}
+		for(Node i : Nodes)
+		{
+			i.runNode();
+		}
 		writeValueFile(layerid);
 	}
+	public void run(Path from,double[] orgin)
+	{
+		createNode(amount, from);
+		if(layerid != 0)
+		{
+			passNodesIn(in.getNodesOut());
+		}
+		else
+		{
+			inputNetworkValues(orgin);
+		}
+		for(Node i : Nodes)
+		{
+			i.initNode();
+		}
+		for(Node i : Nodes)
+		{
+			i.runNode();
+		}
+		writeValueFile(layerid);
+	}
+	public void inputNetworkValues(double[] networkInput)
+	{
+		if(in == null)
+		{
+			passNodesIn(networkInput);
+		}
+	}
+	public Network getParent()
+	{
+		return parent;
+	}
+	public int getLayerId()
+	{
+		return layerid;
+	}
+	public double[] getNodesOut()
+	{
+		double[] temp = new double[amount];
+				
+		for(int i = 0; i < Nodes.size(); i++) 
+		{
+			temp[i] = Nodes.get(i).getValue();
+		}
+		return temp;
+		
+	}
+	public void passNodesIn(double[] input)
+	{
+		for (int j = 0; j < Nodes.size(); j++) 
+		{
+			Nodes.get(j).setInputValues(input);
+		}
+	}
+	public Layer getInLayer()
+	{
+		return in;
+	}
+	public Layer getoutLayer()
+	{
+		return out;
+	}
+	public int getAmount()
+	{
+		return amount;
+	}
+	public char getType()
+	{
+		return type;
+	}
+	public void getIn()
+	{
+		if(parent.getLayerP(layerid) != null)
+		{
+			in=parent.getLayerP(layerid);
+		}
+		
+	}
+	public void getOut()
+	{
+		if(parent.getLayerN(layerid) != null)
+		{
+		out=parent.getLayerN(layerid);
+		}
+	}
+	
+	public void initFolders()
+	{
+		
+		if(!Paths.get("src\\main\\network"+parent.getNetworkid()+"\\"+ layerid +"_layer_"+type).toFile().exists())
+		{
+			Paths.get("src\\main\\network"+parent.getNetworkid()+"\\"+ layerid +"_layer_"+type).toFile().mkdir();
+		}
+	}
+ 	
+	
 	public void constructNodes()
 	{
 		
 	}
-	public void proccessIN()
+	
+	
+	public void getLayerPath()
 	{
-		//gets input values from master list of inputs from previous layer
-		if(layerid != 0)
-		{
-			if(NodeController.out.get(layerid-1).size() == 0 )
-			{
-				
-			}
-			else
-			{
-				inl = NodeController.out.get(layerid-1);
-			}
-		}
-		
-		
+		layerp = Paths.get(parent.getPath()+"\\"+layerid+"_layer_"+type);
 	}
-	public void appendIO()
-	{
-		//adds out and in to master list
-		NodeController.in.add(layerid, inl);
-		NodeController.out.add(layerid, outl);
-	}
-	public void getLayerPath(Path ntwrk)
-	{
-		layerp = Paths.get(nk+"\\"+layerid+"_layer_"+type);
-	}
-	public void createNode(char t, int a)
+	public void createNode(int a)
 	{
 		//created node based on args
-		switch(t)
+		for(int i = 0; i < a; i++)
 		{
-		case 'H':
-			createHidden(a, inl);
-			break;
-		case 'O':
-			createOutput(a, inl);
-			break;
-		case 'I':
-			createInput(a, inl);
-			break;
+			Nodes.add(new Node(i, this));
 		}
 	}
-	public void createNode(char t, int a, Path k)
+	public void createNode(int a, Path from)
 	{
 		//created node based on args
-		switch(t)
+		for(int i = 0; i < a; i++)
 		{
-		case 'H':
-			createHidden(a, inl, k);
-			break;
-		case 'O':
-			createOutput(a, inl, k);
-			break;
-		case 'I':
-			createInput(a, inl, k);
-			break;
+			Nodes.add(new Node(i, this, from));
 		}
 	}
-	public void getOutValues()
-	{
-		//retreives proccesed out data from nodes
-		outl.clear();
-		for(int i = 0; i < Nodes.size(); i++)
-		{
-			outl.add(Nodes.get(i).getValue());
-			//System.out.println(Nodes.get(i).getValue());
-		}
-		if(type == 'O')
-		{
-			//NodeController.terminateNN(outl);
-		}
-
-	}
-	//
 	public void writeValueFile(int layer)
 	{
 		try
 		{
 			//writes the output of the layer to the outvalue file
-			File file = new File("src\\main\\network"+networkid+"\\"+ layerid +"_layer_"+type+"\\outvalue.txt");
+			File file = new File("src\\main\\network"+parent.getNetworkid()+"\\"+ layerid +"_layer_"+type+"\\outvalue.txt");
 			FileWriter fw = new FileWriter(file, false);
 			BufferedWriter out = new BufferedWriter(fw);
-			for(int i = 0; i < outl.size(); i++)
-			{
-				out.write(outl.get(i).toString());
-				out.newLine();
-				
-			}
+			out.write(getNodesOut().toString());
+			out.newLine();
 			out.flush();
 			fw.flush();
 			out.close();
@@ -152,56 +206,5 @@ public class Layer
 			e.printStackTrace();
 		}
 	}
-	public void createHidden(int a, ArrayList<Double> in)
-	{
-		for(int i = 0; i < a; i++)
-		{
-			Nodes.add(new HiddenNode(i,layerid, in));
-		}
-	}
-	public void createOutput(int a, ArrayList<Double> in)
-	{
-		for(int i = 0; i < a; i++)
-		{
-		Nodes.add(new OutputNode(i,layerid, in));
-		}
-	}
-	public void createInput(int a, ArrayList<Double> in)
-	{
-		for(int i = 0; i < a; i++)
-		{
-			
-			Nodes.add(new InputNode(i,layerid, in));
-		}
-	}
-	public void createHidden(int a, ArrayList<Double> in, Path k)
-	{
-		for(int i = 0; i < a; i++)
-		{
-			Nodes.add(new HiddenNode(i,layerid, in, k));
-		}
-	}
-	public void createOutput(int a, ArrayList<Double> in, Path k)
-	{
-		for(int i = 0; i < a; i++)
-		{
-		Nodes.add(new OutputNode(i,layerid, in, k));
-		}
-	}
-	public void createInput(int a, ArrayList<Double> in, Path k)
-	{
-		for(int i = 0; i < a; i++)
-		{
-			Nodes.add(new InputNode(i,layerid, in, k));
-		}
-	}
-	/*public void appendValues(double f, int ind)
-	{
-		HNValues[ind] = f;
-		
-	}
-	public double[] HNV()
-	{
-		return HNValues;
-	}*/
+
 }

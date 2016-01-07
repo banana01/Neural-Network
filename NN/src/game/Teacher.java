@@ -1,4 +1,4 @@
-package main;
+package game;
 public class Teacher 
 {
 	//dumbass teacher random dumbass

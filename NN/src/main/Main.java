@@ -1,6 +1,9 @@
 package main;
 
-import java.io.IOException;
+import java.util.ArrayList;
+
+import game.Game;
+import game.Teacher;
 
 public class Main 
 {
@@ -8,13 +11,20 @@ public class Main
 	int[] teacher2 = {0,0};
 	float[] HNV = new float[27];
 	public static Game g = new Game();
+	public static ArrayList<Double> finalout = new ArrayList<Double>();
 	Teacher t = new Teacher();
-	classConstructor cc = new classConstructor();
-	public static NodeController nc;
+	NetworkConstructor ncr = new NetworkConstructor();
+	public static Network nc;
 	public static void main(String args[])
 	{
 		Main ma = new Main();
-		nc = new NodeController(ma.cc.createClass(), ma.cc.grabNetwork());
+		g.modifyLoc(0, 2, 1);
+		g.modifyLoc(1, 1, -1);
+		g.modifyLoc(2, 0, 1);
+		g.printBoard(g.getBoard());
+		nc = new Network(ma.ncr.createClass(), ma.ncr.grabFromNetwork(), 7, g.convertTo1xN());
+		//nc = new Network(5, g.convertTo1xN());
+		System.out.println(finalout);
 		/*g.init();
 		int count = 240000;
 		long startTime = System.nanoTime();
@@ -31,51 +41,6 @@ public class Main
 		System.out.println(g.owin+"::O wins");
 		System.out.println(g.xwin+"::X wins");
 		System.out.println(g.cats+"::cats");*/
-		//g.modifyLoc(0, 2, 1);
-		//g.modifyLoc(1, 1, -1);
-		//g.modifyLoc(2, 0, 1);
-		//nc.populateBoard();
-		//nc.createLayer(0, 'I', 9);
-		//nc.createLayer(1, 'H', 27);
-		//nc.createLayer(2, 'O', 9);
-		//g.printBoard(g.board);
-		
-		//System.out.println(t.GetRandom());
-		//m.printBoard(m.board);
-		//m.modifyLoc(1, 0, 1);
-		//m.modifyLoc(1, 1, 1);
-		//m.modifyLoc(1, 2, 1);
-		//m.printBoard(m.board);
-		//t.updateBoard(m.board);
-		//System.out.println(t.GetRandom());
-		/*System.out.println(m.evaluate());
-		m.clearBoard();
-		m.printBoard();
-		m.modifyLoc(0, 2, 4);
-		m.modifyLoc(1, 1, 4);
-		m.modifyLoc(2, 0, 4);
-		m.printBoard();
-		System.out.println(m.evaluate());
-		m.clearBoard();
-		m.printBoard();
-		m.modifyLoc(0, 0, 8);
-		m.modifyLoc(1, 1, 8);
-		m.modifyLoc(2, 2, 8);
-		m.printBoard();
-		System.out.println(m.evaluate());
-		m.clearBoard();
-		m.printBoard();
-		m.modifyLoc(0, 0, 1);
-		m.modifyLoc(1, 0, 2);
-		m.modifyLoc(2, 0, 3);
-		m.modifyLoc(0, 1, 4);
-		m.modifyLoc(1, 1, 5);
-		m.modifyLoc(2, 1, 6);
-		m.modifyLoc(0, 2, 7);
-		m.modifyLoc(1, 2, 8);
-		m.modifyLoc(2, 2, 9);
-		m.printBoard();
-		System.out.println(m.evaluate());*/
 		
 		
 	}
@@ -84,15 +49,15 @@ public class Main
 		do
 		{
 			checkMove();
-			g.printBoard(g.board);
-			if(g.evaluate(g.board) != 0)
+			g.printBoard(g.getBoard());
+			if(g.evaluate(g.getBoard()) != 0)
 			{
 				break;
 			}
 			checkMoveB();
-			g.printBoard(g.board);
+			g.printBoard(g.getBoard());
 		}
-		while(g.leagalMove() >= 0 && g.evaluate(g.board) == 0);
+		while(g.leagalMove() >= 0 && g.evaluate(g.getBoard()) == 0);
 		g.clearBoard();
 	}
 	public void checkMove()
@@ -112,7 +77,7 @@ public class Main
 			
 		
 		}
-		System.out.println("WinCheck:: "+Main.g.evaluate(Main.g.board));
+		System.out.println("WinCheck:: "+Main.g.evaluate(Main.g.getBoard()));
 	}
 	public void checkMoveB()
 	{
@@ -131,6 +96,6 @@ public class Main
 			
 		
 		}
-		System.out.println("WinCheck:: "+Main.g.evaluate(Main.g.board));
+		System.out.println("WinCheck:: "+Main.g.evaluate(Main.g.getBoard()));
 	}
 }

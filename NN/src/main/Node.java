@@ -8,60 +8,145 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Node 
 {
-	File file;
-	double value;
-	int networkid = 3;
-	
-	//sigmoid function
-	public double output(double v)
+	private File file;
+	private Layer parent;
+	private int num = 0;
+	private double baseWeight = 0.5f, baseOffset = 0f, value = 0f;
+	private Path self;
+	private ArrayList<Double> inputValues = new ArrayList<Double>();
+	private ArrayList<Double> weights = new ArrayList<Double>();
+	Node(int name, Layer lay)
 	{
-		return (1/(1 + Math.exp(-v)));
+		//var decleration
+		num = name;
+		parent = lay;
+		
+		
+		
+		
+		
+		
+		readWeights();
+
+	}
+	Node(int name, Layer lay, Path from)
+	{
+		//var decleration
+		num = name;
+		parent = lay;
+		
+		
+		
+		
+		
+		getWeightsFromFile(from);
+		writeWeights();
+	}
+	public void initNode()
+	{
+		initFile();
+	}
+	public void setInputValues(double[] input)
+	{
+		inputValues.clear();
+		for (int i = 0; i < input.length; i++) 
+		{
+			inputValues.add(input[i]);
+		}
+	}
+
+	//gives raw sum of inputs before normalized to 0-1
+	public void calculateValue()
+	{
+		double temp2 = baseOffset;
+		for(int i = 0; i < weights.size(); i++)
+		{
+			temp2 = (inputValues.get(i) * weights.get(i)) + temp2;
+		}
+		value = (1/(1 + Math.exp(-temp2)));
+	}
+	public void baseWeights()
+	{
+		weights.clear();
+		if(parent.getType()!='I')
+		{
+			for (int i = 0; i < parent.getInLayer().getAmount(); i++) 
+			{
+				
+				weights.add(baseWeight);
+			}	
+		}
+		else
+		{
+			for (int i = 0; i < parent.getAmount(); i++) 
+			{
+				weights.add(baseWeight);
+			}	
+		}
 		
 	}
-	//gives raw sum of inputs before normalized to 0_1
-	public double calculateValue( ArrayList<Double> w, ArrayList<Double> iv, double bo)
+	public void runNode()
 	{
-		double temp2 = bo;
-		for(int i = 0; i < w.size(); i++)
-		{
-			temp2 = (iv.get(i) * w.get(i)) + temp2;
-		}
-		return temp2;
+		calculateValue();
+		writeWeights();
 	}
 	//stops a bug we had
-	public void initFile(int n, int layerid,char type)
+	public void initFile()
 	{
-		file = new File("src\\main\\network"+networkid+"\\"+ layerid +"_layer_"+type+"\\"+n+"_weights.txt");
+		baseWeights();
+		file = new File("src\\main\\network"+parent.getParent().getNetworkid()+"\\"+ parent.getLayerId() +"_layer_"+parent.getType()+"\\"+num+"_weights.txt");
 		try {
-			PrintWriter writer = new PrintWriter("src\\main\\network"+networkid+"\\"+ layerid +"_layer_"+type+"\\"+n+"_weights.txt", "ASCII");
-			writer.flush();
-			writer.close();
+			FileWriter fw = new FileWriter(file, false);
+			BufferedWriter out = new BufferedWriter(fw);
+			for(int i = 0; i < weights.size(); i++)
+			{
+				out.write(weights.get(i).toString());
+				out.newLine();
+				
+			}
+			out.flush();
+			fw.flush();
+			out.close();
+			fw.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto_generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto_generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
 		}
 		
 	}
+	public void getWeightsFromFile(Path from)
+	{
+		self = Paths.get(from.toString()+parent.getLayerId()+"\\"+num+"_weights.txt");
+		readWeightsFromFile();
+		
+	}
+	public double getValue()
+	{
+		return value;
+	}
+
 	
 	//writes weight values to files for editing and persistance
-	public void writeWeights(int n, ArrayList<Double> w, int layerid, char type)
+	public void writeWeights()
 	{
 		try
 		{
-			file = new File("src\\main\\network"+networkid+"\\"+ layerid +"_layer_"+type+"\\"+n+"_weights.txt");
+			file = new File("src\\main\\network"+parent.getParent().getNetworkid()+"\\"+parent.getLayerId() +"_layer_"+parent.getType()+"\\"+num+"_weights.txt");
 			FileWriter fw = new FileWriter(file, false);
 			BufferedWriter out = new BufferedWriter(fw);
-			for(int i = 0; i < w.size(); i++)
+			for(int i = 0; i < weights.size(); i++)
 			{
-				out.write(w.get(i).toString());
+				out.write(weights.get(i).toString());
 				out.newLine();
 				
 			}
@@ -73,76 +158,55 @@ public class Node
 		}
 		catch(FileNotFoundException e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IOException e) 
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
-	public void getWeightsFromFile(Path layer, int nid)
-	{
-				
-	}
-	public char getType()
-	{
-		return 'E';
-	}
-	//overrided by subnodes sets computed value
 	public void setValue(double v)
 	{
 		value = v;
 	}
-	//overrided by subnodes returns computed value
-	public double getValue()
-	{
-		return value;
-	}
 	//reads weight values for usage from files
-	public void readWeights(int n, ArrayList<Double> w, int layerid, char type)
+	public void readWeights()
 	{
-		w.clear();
+		weights.clear();
 			Scanner readweights;
 			try {
-				readweights = new Scanner(new File("src\\main\\network"+networkid+"\\"+ layerid +"_layer_"+type+"\\"+n+"_weights.txt"));
+				readweights = new Scanner(new File("src\\main\\network"+parent.getParent().getNetworkid()+"\\"+ parent.getLayerId() +"_layer_"+parent.getType()+"\\"+num+"_weights.txt"));
 				if(readweights.hasNextLine())
 				{
 					while(readweights.hasNextLine())
 					{
 							
-							w.add(Double.parseDouble(readweights.nextLine()));
+						weights.add(Double.parseDouble(readweights.nextLine()));
 					
 					}
 					readweights.close();
 				}
 				else
 				{
-					initFile(n, layerid, type);
-					writeWeights(n, w, layerid, type);
+					initFile();
+					writeWeights();
 				}
 			} catch (FileNotFoundException e) {
-				// TODO Auto_generated catch block
 				//e.printStackTrace();
 			}
-			
-				
-				
-			
-			
-		
-		
+
 	}
-	public void readWeightsFromFile(ArrayList<Double> w, Path weg)
+	public void readWeightsFromFile()
 	{
-			w.clear();
+			weights.clear();
 			Scanner readweights;
 			try {
-				readweights = new Scanner(weg.toFile());
+				readweights = new Scanner(self.toFile());
 				if(readweights.hasNextLine())
 				{
 					while(readweights.hasNextLine())
 					{
 							
-							w.add(Double.parseDouble(readweights.nextLine()));
+							weights.add(Double.parseDouble(readweights.nextLine()));
 					
 					}
 					readweights.close();
@@ -164,11 +228,11 @@ public class Node
 		
 	}
 	//debug for weight data
-	public void printWeights(ArrayList<Double> w)
+	public void printWeights()
 	{
-		for(int i = 0; i < w.size(); i++)
+		for(int i = 0; i < weights.size(); i++)
 		{
-			System.out.print(w.get(i)+" ");
+			System.out.print(weights.get(i)+" ");
 		}
 		System.out.println("\n");
 	}

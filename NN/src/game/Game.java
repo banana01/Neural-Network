@@ -1,10 +1,12 @@
-package main;
+package game;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+
+import main.Main;
 
 public class Game 
 {
@@ -14,8 +16,8 @@ public class Game
 	BufferedWriter bfg;
 	int owin=0, xwin= 0,cats=0;
 	int gameindex = 0;
-	int[][] board = {{0,0,0},{0,0,0},{0,0,0}};
-	Game()
+	private int[][] board = {{0,0,0},{0,0,0},{0,0,0}};
+	public Game()
 	{
 		
 		gameFolder = new File("src\\main\\gameHistory");
@@ -26,6 +28,21 @@ public class Game
 		gameindex = grabIndex()+1;
 		gameStore = new File("src\\main\\gameHistory\\run_"+gameindex+".txt");
 		
+	}
+	public double[] convertTo1xN()
+	{
+		int k = 0;
+		double[] temp = new double[9];
+		for(int i = 0; i < 3; i++)
+		{
+			for(int j = 0; j < 3; j++)
+			{
+				k++;
+				temp[k-1] = (double)Main.g.getBoard()[i][j];
+						
+			}
+		}
+		return temp;
 	}
 	//prints board
 	public void printBoard(int[][] bd)
@@ -47,7 +64,7 @@ public class Game
 		{
 			for(int j = 0; j < 3; j++)
 			{
-				board[j][i] = 0;
+				getBoard()[j][i] = 0;
 			}
 		}
 	}
@@ -59,7 +76,7 @@ public class Game
 		{
 			for(int j = 0; j < 3; j++)
 			{
-				if(board[i][j] == 0)
+				if(getBoard()[i][j] == 0)
 				{
 					zeroCount++;
 				}
@@ -70,9 +87,9 @@ public class Game
 	//changes location on board if legal, also calls update
 	public int modifyLoc(int r, int c, int change)
 	{
-		if (board[r][c] == 0)
+		if (getBoard()[r][c] == 0)
 		{
-			board[r][c] = change;
+			getBoard()[r][c] = change;
 			//boardUpdate();
 			return 0;
 		}
@@ -87,10 +104,22 @@ public class Game
 		Random r = new Random();
 		return r.nextFloat() * leagalMove() + 1;
 	}
+	/**
+	 * @return the board
+	 */
+	public int[][] getBoard() {
+		return board;
+	}
+	/**
+	 * @param board the board to set
+	 */
+	public void setBoard(int[][] board) {
+		this.board = board;
+	}
 	//checks location on board for state
 	public int checkLoc(int[] loc)
 	{
-		return board[loc[0]][loc[1]];
+		return getBoard()[loc[0]][loc[1]];
 	}
 	//called when board is changed
 	public void boardUpdate()
@@ -122,19 +151,19 @@ public class Game
 		char[][] parsedBoard = {{'_','_','_'},{'_','_','_'},{'_','_','_'}};
 		try {
 			
-			for(int i = 0; i < board.length; i++)
+			for(int i = 0; i < getBoard().length; i++)
 			{
-				for(int j = 0; j < board.length; j++)
+				for(int j = 0; j < getBoard().length; j++)
 				{
-					if(board[i][j] == -1)
+					if(getBoard()[i][j] == -1)
 					{
 						parsedBoard[i][j] = '0';
 					}
-					else if(board[i][j] == 1)
+					else if(getBoard()[i][j] == 1)
 					{
 						parsedBoard[i][j] = 'X';
 					}
-					else if(board[i][j] != 0)
+					else if(getBoard()[i][j] != 0)
 					{
 						parsedBoard[i][j] = 'E';
 					}
@@ -147,16 +176,16 @@ public class Game
 				
 			}
 			bfg.newLine();
-			if(evaluate(board) != 0)
+			if(evaluate(getBoard()) != 0)
 			{
 				
 				bfg.newLine();
-				if(evaluate(board) == 1)
+				if(evaluate(getBoard()) == 1)
 				{
 					xwin++;
 					bfg.write("@X@");
 				}
-				else if(evaluate(board) == -1)
+				else if(evaluate(getBoard()) == -1)
 				{
 					owin++;
 					bfg.write("@0@");

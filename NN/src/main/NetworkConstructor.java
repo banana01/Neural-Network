@@ -5,19 +5,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class classConstructor 
+public class NetworkConstructor 
 {
-	int networkid = 1;
-	File network = new File("src\\main\\network"+networkid);
+	int fromnetworkid = 5;
+	File fromnetwork = new File("src\\main\\network"+fromnetworkid);
 	ArrayList<Integer[]> values = new ArrayList<Integer[]>();
 	File[] layers;
-	classConstructor()
+	NetworkConstructor()
 	{
 		
 	}
 	public ArrayList<Integer[]> createClass()
 	{
-		layers = network.listFiles();
+		layers = fromnetwork.listFiles();
 		for (int i = 0; i < layers.length; i++) 
 		{
 			String[] name = layers[i].getName().split("_");
@@ -41,8 +41,8 @@ public class classConstructor
 		return values;
 		
 	}
-	public Path grabNetwork()
+	public Path grabFromNetwork()
 	{
-		return Paths.get("src\\main\\network"+networkid);
+		return Paths.get("src\\main\\network"+fromnetworkid);
 	}
 }
