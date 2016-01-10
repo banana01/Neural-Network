@@ -17,86 +17,53 @@ public class Node
 	private File file;
 	private Layer parent;
 	private int num = 0;
-	private double baseWeight = 0.5f, baseOffset = 0f, value = 0f;
-	private Path self;
+	private double baseWeight = 0.5f, baseOffset = 0f, value;
+	private Path fromLoc,self;
 	private ArrayList<Double> inputValues = new ArrayList<Double>();
 	private ArrayList<Double> weights = new ArrayList<Double>();
+	//blank constructor
+	Node()
+	{
+		
+	}
+	// constructs from layer
 	Node(int name, Layer lay)
 	{
 		//var decleration
-		num = name;
-		parent = lay;
+		setID(name);
+		setParentLayer(lay);
 		
 		
 		
 		
 		
 		
-		readWeights();
+		setWeights();
 
 	}
+	// clones node from file
 	Node(int name, Layer lay, Path from)
 	{
-		//var decleration
-		num = name;
-		parent = lay;
+		setID(name);
+		setParentLayer(lay);
 		
 		
 		
 		
 		
-		getWeightsFromFile(from);
+		setWeightsFromFile(from);
 		writeWeights();
 	}
+	
 	public void initNode()
 	{
 		initFile();
-	}
-	public void setInputValues(double[] input)
-	{
-		inputValues.clear();
-		for (int i = 0; i < input.length; i++) 
-		{
-			inputValues.add(input[i]);
-		}
-	}
-
-	//gives raw sum of inputs before normalized to 0-1
-	public void calculateValue()
-	{
-		double temp2 = baseOffset;
-		for(int i = 0; i < weights.size(); i++)
-		{
-			temp2 = (inputValues.get(i) * weights.get(i)) + temp2;
-		}
-		value = (1/(1 + Math.exp(-temp2)));
-	}
-	public void baseWeights()
-	{
-		weights.clear();
-		if(parent.getType()!='I')
-		{
-			for (int i = 0; i < parent.getInLayer().getAmount(); i++) 
-			{
-				
-				weights.add(baseWeight);
-			}	
-		}
-		else
-		{
-			for (int i = 0; i < parent.getAmount(); i++) 
-			{
-				weights.add(baseWeight);
-			}	
-		}
-		
 	}
 	public void runNode()
 	{
 		calculateValue();
 		writeWeights();
 	}
-	//stops a bug we had
 	public void initFile()
 	{
 		baseWeights();
@@ -124,15 +91,69 @@ public class Node
 		}
 		
 	}
-	public void getWeightsFromFile(Path from)
+	
+	
+	public void setParentLayer(Layer par)
 	{
-		self = Paths.get(from.toString()+parent.getLayerId()+"\\"+num+"_weights.txt");
-		readWeightsFromFile();
-		
+		this.parent=par;
 	}
+	public void setID(int n)
+	{
+		this.num=n;
+	}
+	public void setInputValues(double[] input)
+	{
+		inputValues.clear();
+		for (int i = 0; i < input.length; i++) 
+		{
+			inputValues.add(input[i]);
+		}
+	}
+	public void setValue(double v)
+	{
+		this.value = v;
+	}
+	
+	
+	
+	
+	
 	public double getValue()
 	{
-		return value;
+		return this.value;
+	}
+
+	//gives raw sum of inputs before normalized to 0-1
+	
+	public void baseWeights()
+	{
+		weights.clear();
+		if(parent.getType()!='I')
+		{
+			for (int i = 0; i < parent.getInLayer().getAmount(); i++) 
+			{
+				
+				weights.add(baseWeight);
+			}	
+		}
+		else
+		{
+			for (int i = 0; i < parent.getAmount(); i++) 
+			{
+				weights.add(baseWeight);
+			}	
+		}
+		
+	}
+
+	//stops a bug we had
+	
+	
+	public void setWeightsFromFile(Path from)
+	{
+		fromLoc = Paths.get(from.toString()+parent.getLayerId()+"\\"+num+"_weights.txt");
+		readWeightsFromFile();
+		
 	}
 
 	
@@ -164,12 +185,9 @@ public class Node
 			//e.printStackTrace();
 		}
 	}
-	public void setValue(double v)
-	{
-		value = v;
-	}
+	
 	//reads weight values for usage from files
-	public void readWeights()
+	public void setWeights()
 	{
 		weights.clear();
 			Scanner readweights;
@@ -200,7 +218,7 @@ public class Node
 			weights.clear();
 			Scanner readweights;
 			try {
-				readweights = new Scanner(self.toFile());
+				readweights = new Scanner(fromLoc.toFile());
 				if(readweights.hasNextLine())
 				{
 					while(readweights.hasNextLine())
@@ -236,4 +254,17 @@ public class Node
 		}
 		System.out.println("\n");
 	}
+	public void calculateValue()
+	{
+		double temp2 = baseOffset;
+		for(int i = 0; i < weights.size(); i++)
+		{
+			temp2 = (inputValues.get(i) * weights.get(i)) + temp2;
+		}
+		value = (1/(1 + Math.exp(-temp2)));
+	}
+	
+	
+	
 }
+
