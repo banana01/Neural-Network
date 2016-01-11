@@ -39,7 +39,7 @@ public class Connection
 	
 	public void shiftWeight(double offset)
 	{
-		weight += offset;
+		this.weight += offset;
 	}
 	
 	public void randomWeight()
