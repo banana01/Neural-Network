@@ -12,13 +12,13 @@ import bananaNetwork.Core.Network.Layer;
 import bananaNetwork.Core.Network.Network;
 import bananaNetwork.Core.Network.Node;
 
-public class Writer
+public class NetworkWriter
 {
 	File file;
 	BufferedWriter BFW;
 	FileWriter FW;
 	ArrayList<Path> layers = new ArrayList<Path>();
-	public Writer(Network ntk) throws IOException
+	public NetworkWriter(Network ntk) throws IOException
 	{
 		buildNetworkFolders(ntk);
 		for (int i = 0; i < ntk.getLayers().size(); i++) 
@@ -85,7 +85,7 @@ public class Writer
 		for (int i = 0; i < n.getInputConnections().size(); i++) 
 		{
 			Connection temp = n.getInputConnections().get(i);
-			BFW.write(temp.getIn().getParent().getID()+"L_"+temp.getIn().getID()+"_"+temp.getWeight());
+			BFW.write(temp.getIn().getParent().getID()+"_L_"+temp.getIn().getID()+"_"+temp.getWeight());
 			BFW.newLine();
 		}
 		//FW.flush();

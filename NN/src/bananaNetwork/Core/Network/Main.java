@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import bananaNetwork.Game.Game;
 import bananaNetwork.Game.Teacher;
-import bananaNetwork.Util.Writer;
+import bananaNetwork.Util.NetworkIniter;
+import bananaNetwork.Util.NetworkReader;
+import bananaNetwork.Util.NetworkWriter;
 
 public class Main 
 {
@@ -16,7 +18,9 @@ public class Main
 	public static ArrayList<Double> finalout = new ArrayList<Double>();
 	Teacher t = new Teacher();
 	NetworkConstructor ncr = new NetworkConstructor();
-	Writer wri;
+	NetworkWriter wri;
+	NetworkReader rea;
+	NetworkIniter ini;
 	public static Network nc;
 
 	public static void main(String args[])
@@ -25,7 +29,9 @@ public class Main
 		g.printBoard(g.getBoard());
 		nc = new DefaultNetwork(1, g.convertTo1xN(), "9_27_9");
 		try {
-			ma.wri = new Writer(nc);
+			ma.ini = new NetworkIniter(nc);
+			ma.rea = new NetworkReader(nc);
+			ma.wri = new NetworkWriter(nc);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -120,6 +120,17 @@ public class Node
 		outNode.hasInputConnection(temp);
 		
 	}
+	public Connection getInputConnectionToNode(int n, int l)
+	{
+		for (int i = 0; i < inputConnections.size(); i++) 
+		{
+			if(inputConnections.get(i).getIn().getID() == n && inputConnections.get(i).getIn().parent.getID() == l)
+			{
+				return inputConnections.get(i);
+			}
+		}
+		return null;
+	}
 	public void runNode(Function function)
 	{
 		if(!inputConnections.isEmpty())
@@ -129,6 +140,7 @@ public class Node
 		}
 		
 	}
+	
 	
 
 
