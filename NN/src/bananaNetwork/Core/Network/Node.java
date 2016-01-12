@@ -97,6 +97,52 @@ public class Node
 	
 	/*----------------------------------------------------*/
 
+	public void freeConnctions()
+	{
+		while(inputConnections.size()>0)
+		{
+			inputConnections.get(0).free();
+		}
+		while(outputConnections.size()>0)
+		{
+			outputConnections.get(0).free();
+		}
+	}
+	public boolean isEmpty()
+	{
+		if(inputConnections==null && outputConnections==null)
+		{
+			return true;
+		}else return false;
+	}
+	public void free()
+	{
+		while(!this.isEmpty())
+		{
+			this.freeConnctions();
+			System.out.println("Im dieing(node)");
+		}
+		parent.removeNode(this);
+		parent.getParent().removeNodeIn(this);
+		parent.getParent().removeNodeOut(this);
+		this.setParent(null);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void addInputConnection(Node inNode)
 	{
 		Connection temp = new Connection(inNode, this);
@@ -120,6 +166,7 @@ public class Node
 		outNode.hasInputConnection(temp);
 		
 	}
+	/*++++++Does not work as intented must return to
 	public Connection getInputConnectionToNode(int n, int l)
 	{
 		for (int i = 0; i < inputConnections.size(); i++) 
@@ -131,6 +178,7 @@ public class Node
 		}
 		return null;
 	}
+	*/
 	public void runNode(Function function)
 	{
 		if(!inputConnections.isEmpty())
@@ -140,7 +188,6 @@ public class Node
 		}
 		
 	}
-	
 	
 
 
@@ -152,6 +199,23 @@ public class Node
 			temp2 = (inputConnections.get(i).getIn().getValue() * inputConnections.get(i).getWeight()) + temp2;
 		}
 		raw=temp2;
+	}
+	
+	public void removeOut(int i)
+	{
+		this.outputConnections.remove(i);
+	}
+	public void removeOut(Connection i)
+	{
+		this.outputConnections.remove(i);
+	}
+	public void removeIn(int i) 
+	{
+		this.inputConnections.remove(i);
+	}
+	public void removeIn(Connection c) 
+	{
+		this.inputConnections.remove(c);
 	}
 
 }

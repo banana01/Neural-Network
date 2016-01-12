@@ -99,4 +99,40 @@ public class Layer
 			Nodes.add(new Node(i, this, from));
 		}
 	}
+	public void removeNode(int i)
+	{
+		Nodes.remove(i);
+	}
+	public void removeNode(Node n)
+	{
+		Nodes.remove(n);
+	}
+	public void addNode(Node n)
+	{
+		n.getParent().removeNode(n);
+		n.setParent(this);
+		Nodes.add(n);
+	}
+	public void freeConnctions()
+	{
+		while(Nodes.size()>0)
+		{
+			Nodes.get(0).free();
+		}
+		
+	}
+	public void free()
+	{
+		while(!this.isEmpty())
+		{
+			this.freeConnctions();
+			System.out.println("Im dieing(node)");
+		}
+		parent.removeLayer(this);
+		this.setParent(null);
+	}
+	private boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

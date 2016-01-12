@@ -36,7 +36,14 @@ public class Connection
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-	
+	//============================================
+	public void free()
+	{
+		in.removeOut(this);
+		out.removeIn(this);
+		setIn(null);
+		setOut(null);
+	}
 	public void shiftWeight(double offset)
 	{
 		this.weight += offset;
@@ -48,3 +55,4 @@ public class Connection
 		setWeight(rnd.nextDouble()-0.5);
 	}
 }
+
