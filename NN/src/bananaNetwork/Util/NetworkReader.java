@@ -23,6 +23,7 @@ public class NetworkReader
 		{
 			nodes.add(getNodeStructure(layers.get(i)));
 		}
+		System.out.println(nodes);
 		//Creates a new network from a network folder
 		for (int i = 0; i < layers.size(); i++) 
 		{
@@ -34,12 +35,15 @@ public class NetworkReader
 				{
 					for(int k = 0; k < nodes.get(i).size(); k++)
 					{
-						ntk.getLayers().get(j).createNode(Integer.parseInt(nodes.get(i).get(k).toString().split("_")[0].split("\\\\")[nodes.get(i).get(k).toString().split("_")[0].split("\\\\").length-1]));
+						Path temp = nodes.get(j).get(k);
+						//System.out.println(temp.toString().split("\\\\")[temp.toString().split("\\\\").length-1].split("_")[0]);
+						ntk.getLayers().get(j).createNode(Integer.parseInt(temp.toString().split("\\\\")[temp.toString().split("\\\\").length-1].split("_")[0]));
 					}
 					
 					
 				}
 			}
+			
 			
 		}
 		//runReader(ntk);

@@ -35,6 +35,7 @@ public class Main
 		try {
 			ma.ini = new NetworkIniter(nc);
 			ma.rea = new NetworkReader(nc, Paths.get("src\\main\\network1"));
+			
 			//System.out.println(nc.getLayers().get(0).getNodes().get(0).getOutputConnections().get(0).getWeight());
 			nc.inputUpdate(g.convertTo1xN());
 			ma.wri = new NetworkWriter(nc);
