@@ -26,24 +26,32 @@ public class Main
 	public static void main(String args[])
 	{
 		Main ma = new Main();
+		g.modifyLoc(1, 2, -1);
+		g.modifyLoc(2, 2, -1);
+		g.modifyLoc(1, 1, -1);
 		g.printBoard(g.getBoard());
-		nc = new DefaultNetwork(1, g.convertTo1xN(), "9_27_9");
+		nc = new DefaultNetwork(1, "9_27_9");
 		try {
 			ma.ini = new NetworkIniter(nc);
 			ma.rea = new NetworkReader(nc);
+			//System.out.println(nc.getLayers().get(0).getNodes().get(0).getOutputConnections().get(0).getWeight());
+			nc.inputUpdate(g.convertTo1xN());
 			ma.wri = new NetworkWriter(nc);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		for (int i = 0; i < nc.networkOutput().length; i++) 
-		{
-			System.out.println(nc.networkOutput()[i]);
-		}
-		g.printBoard(g.roundBoard(g.convertTo3x3(nc.networkOutput())));
+		//for (int i = 0; i < nc.networkOutput().length; i++) 
+		//{
+		//	System.out.println(nc.networkOutput()[i]);
+		//}
+		int[] temp = g.roundBoard(g.convertTo3x3(nc.networkOutput()));
+		System.out.println(temp[0]);
+		System.out.println(temp[1]);
+		System.out.println(g.modifyLoc(temp[0], temp[1], 1));
 		g.printBoard(g.getBoard());
-		g.init();
+		/*g.init();
 		int count = 240000;
 		long startTime = System.nanoTime();
 		for(int i = 0; i < count; i++)
@@ -88,7 +96,7 @@ public class Main
 	{
 		do
 		{
-			nc.onBoardUpdate(g.convertTo1xN());
+			nc.inputUpdate(g.convertTo1xN());
 			g.convertTo3x3(nc.networkOutput());
 			g.printBoard(g.getBoard());
 			if(g.evaluate(g.getBoard()) != 0)

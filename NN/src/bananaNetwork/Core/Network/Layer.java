@@ -19,6 +19,12 @@ public class Layer
 		setPath();
 		initLayer();
 	}
+	Layer(int id, Network p)
+	{
+		setID(id);
+		setParent(p);
+		setPath();
+	}
 	public int getID() {
 		return ID;
 	}
@@ -69,6 +75,10 @@ public class Layer
 		{
 			nodes.add(new Node(i, this));
 		}
+	}
+	public void createNode(int i)
+	{
+		nodes.add(new Node(i, this));
 	}
 	public void removeNode(int i)
 	{

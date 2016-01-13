@@ -57,7 +57,7 @@ public abstract class Network
 	}
 
 	//=====================================================//
-	public void onBoardUpdate(double[] maininput)
+	public void inputUpdate(double[] maininput)
 	{
 		sendNetworkInput(maininput);
 		runNetwork();
@@ -123,6 +123,10 @@ public abstract class Network
 	public void createLayer(int layerid, int nl)
 	{
 		this.layers.add(new Layer(layerid, nl, this));
+	}
+	public void createLayer(int layerid)
+	{
+		this.layers.add(new Layer(layerid, this));
 	}
 	public void removeLayer(int i)
 	{

@@ -59,9 +59,9 @@ public class Game
 		return temp;
 		
 	}
-	public int[][] roundBoard(double[][] dbb)
+	public int[] roundBoard(double[][] dbb)
 	{
-		int[][] temp1 = {{0,0,0},{0,0,0},{0,0,0}};
+		int[] ij = new int[2];
 		double biggest = -5;
 		
 		for(int i = 0; i < 3; i++)
@@ -80,11 +80,12 @@ public class Game
 			{
 				if(biggest == dbb[i][j])
 				{
-					temp1[i][j] = 1;
+					ij[0] = i;
+					ij[1] = j;
 				}
 			}
 		}
-		return temp1;
+		return ij;
 	}
 			
 	//prints board
@@ -128,17 +129,17 @@ public class Game
 		return zeroCount;
 	}
 	//changes location on board if legal, also calls update
-	public int modifyLoc(int r, int c, int change)
+	public boolean modifyLoc(int r, int c, int change)
 	{
 		if (getBoard()[r][c] == 0)
 		{
 			getBoard()[r][c] = change;
 			//boardUpdate();
-			return 0;
+			return true;
 		}
 		else
 		{
-			return -2;
+			return false;
 		}
 	}
 	//used for dumbass teachers
