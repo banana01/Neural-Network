@@ -23,16 +23,18 @@ public class NetworkReader
 		{
 			nodes.add(getNodeStructure(layers.get(i)));
 		}
+		//Creates a new network from a network folder
 		for (int i = 0; i < layers.size(); i++) 
 		{
-			ntk.createLayer(Integer.parseInt(layers.get(i).toString().split("_")[0]));
+//			System.out.println(layers.get(i).toString().split("_")[0].split("\\\\")[3]);
+			ntk.createLayer(Integer.parseInt(layers.get(i).toString().split("_")[0].split("\\\\")[layers.get(i).toString().split("_")[0].split("\\\\").length-1]));
 			for (int j = 0; j < ntk.getLayers().size(); j++) 
 			{
-				if(ntk.getLayers().get(j).getID() == Integer.parseInt(layers.get(i).toString().split("_")[0]))
+				if(ntk.getLayers().get(j).getID() == Integer.parseInt(layers.get(i).toString().split("_")[0].split("\\\\")[layers.get(i).toString().split("_")[0].split("\\\\").length-1]))
 				{
 					for(int k = 0; k < nodes.get(i).size(); k++)
 					{
-						ntk.getLayers().get(j).createNode(Integer.parseInt(nodes.get(i).get(k).toString().split("_")[0]));
+						ntk.getLayers().get(j).createNode(Integer.parseInt(nodes.get(i).get(k).toString().split("_")[0].split("\\\\")[nodes.get(i).get(k).toString().split("_")[0].split("\\\\").length-1]));
 					}
 					
 					

@@ -52,6 +52,7 @@ public class Game
 		{
 			for (int j = 0; j < 3; j++) 
 			{
+				System.out.println(in[k]);
 				temp[i][j] = in[k];
 				k++;
 			}
