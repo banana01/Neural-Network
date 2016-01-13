@@ -14,7 +14,7 @@ public class Game
 	File gameFolder;
 	FileWriter fwg;
 	BufferedWriter bfg;
-	int owin=0, xwin= 0,cats=0;
+	public int owin=0, xwin= 0,cats=0;
 	int gameindex = 0;
 	private int[][] board = {{0,0,0},{0,0,0},{0,0,0}};
 	public Game()
@@ -86,6 +86,7 @@ public class Game
 		}
 		return temp1;
 	}
+			
 	//prints board
 	public void printBoard(int[][] bd)
 	{

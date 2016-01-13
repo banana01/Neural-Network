@@ -67,7 +67,11 @@ public abstract class Network
 		this.clone = clone;
 	}
 	//=====================================================//
-	
+	public void onBoardUpdate(double[] maininput)
+	{
+		sendNetworkInput(maininput);
+		runNetwork();
+	}
 	public void createConnection(Node in, Node out)
 	{
 		in.addOutputConnection(out);

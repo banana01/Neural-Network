@@ -22,10 +22,6 @@ public class Main
 	public static void main(String args[])
 	{
 		Main ma = new Main();
-		g.modifyLoc(0, 2, 1);
-		g.modifyLoc(1, 1, -1);
-		g.modifyLoc(2, 0, 1);
-		g.modifyLoc(2, 1, 1);
 		g.printBoard(g.getBoard());
 		nc = new DefaultNetwork(1, g.convertTo1xN(), "9_27_9");
 		try {
@@ -34,11 +30,29 @@ public class Main
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		for (int i = 0; i < nc.networkOutput().length; i++) 
 		{
-			System.out.println();
+			System.out.println(nc.networkOutput()[i]);
 		}
 		g.printBoard(g.roundBoard(g.convertTo3x3(nc.networkOutput())));
+		g.printBoard(g.getBoard());
+		g.init();
+		int count = 240000;
+		long startTime = System.nanoTime();
+		for(int i = 0; i < count; i++)
+		{
+			ma.runGame();
+		}
+		long endTime = System.nanoTime();
+		try {
+			g.dump();
+		} catch (IOException e) {
+		}
+		System.out.println("Took "+(endTime - startTime) + " ns");
+		System.out.println(g.owin+"::O wins");
+		System.out.println(g.xwin+"::X wins");
+		System.out.println(g.cats+"::cats");
 
 		
 		//g.printBoard(g.getBoard());
@@ -68,7 +82,8 @@ public class Main
 	{
 		do
 		{
-			checkMove();
+			nc.onBoardUpdate(g.convertTo1xN());
+			g.convertTo3x3(nc.networkOutput());
 			g.printBoard(g.getBoard());
 			if(g.evaluate(g.getBoard()) != 0)
 			{
