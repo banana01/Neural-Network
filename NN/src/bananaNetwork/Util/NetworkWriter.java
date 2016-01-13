@@ -85,7 +85,7 @@ public class NetworkWriter
 		for (int i = 0; i < n.getInputConnections().size(); i++) 
 		{
 			Connection temp = n.getInputConnections().get(i);
-			BFW.write(temp.getIn().getParent().getID()+"_L_"+temp.getIn().getID()+"_"+temp.getWeight());
+			BFW.write(temp.getIn().getParent().getID()+"_"+temp.getIn().getID()+"_"+temp.getWeight());
 			BFW.newLine();
 		}
 		//FW.flush();

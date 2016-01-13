@@ -9,8 +9,8 @@ public class Layer
 {
 	private int ID, amount;
 	private Network parent;
-	private List<Node> Nodes = new ArrayList<Node>();
-	private Path path, clone;
+	private List<Node> nodes = new ArrayList<Node>();
+	private Path path;
 	Layer(int id, int a, Network p)
 	{
 		setID(id);
@@ -18,17 +18,6 @@ public class Layer
 		setParent(p);
 		setPath();
 		initLayer();
-	}
-	Layer(int id, int a,  Network p, Path f)
-	{
-		setID(id);
-		setAmount(a);
-		setParent(p);
-		setPath();
-		setClone(f);
-		initLayer(clone);
-		
-		
 	}
 	public int getID() {
 		return ID;
@@ -49,10 +38,10 @@ public class Layer
 		this.parent = parent;
 	}
 	public List<Node> getNodes() {
-		return Nodes;
+		return nodes;
 	}
-	public void setNodes(List<Node> nodes) {
-		Nodes = nodes;
+	public void setNodes(List<Node> nodess) {
+		nodes = nodess;
 	}
 	public Path getPath() {
 		return path;
@@ -60,12 +49,8 @@ public class Layer
 	public void setPath(Path path) {
 		this.path = path;
 	}
-	public Path getClone() {
-		return clone;
-	}
-	public void setClone(Path clone) {
-		this.clone = clone;
-	}
+	
+	// Default path
 	public void setPath()
 	{
 		this.path = Paths.get(parent.getPath()+"\\"+ID+"_layer");
@@ -74,50 +59,42 @@ public class Layer
 	/*---------------------------------------------------------*/
 	public void initLayer()
 	{
-		createNode();
+		createNodes();
 	}
-	public void initLayer(Path f)
-	{
-		createNode(clone);
-	}
-	
-	
-	
-	public void createNode()
+	public void createNodes()
 	{
 		//created node based on args
+		
 		for(int i = 0; i < amount; i++)
 		{
-			Nodes.add(new Node(i, this));
-		}
-	}
-	public void createNode(Path from)
-	{
-		//created node based on args
-		for(int i = 0; i < amount; i++)
-		{
-			Nodes.add(new Node(i, this, from));
+			nodes.add(new Node(i, this));
 		}
 	}
 	public void removeNode(int i)
 	{
-		Nodes.remove(i);
+		nodes.remove(i);
+		amount--;
 	}
 	public void removeNode(Node n)
 	{
-		Nodes.remove(n);
+		nodes.remove(n);
+		amount--;
 	}
 	public void addNode(Node n)
 	{
-		n.getParent().removeNode(n);
-		n.setParent(this);
-		Nodes.add(n);
-	}
-	public void freeConnctions()
-	{
-		while(Nodes.size()>0)
+		if(n.getParent()!=null);
 		{
-			Nodes.get(0).free();
+			n.getParent().removeNode(n);
+		}
+		n.setParent(this);
+		nodes.add(n);
+		amount++;
+	}
+	public void freeNodes()
+	{
+		while(nodes.size()>0)
+		{
+			nodes.get(0).free();
 		}
 		
 	}
@@ -125,14 +102,18 @@ public class Layer
 	{
 		while(!this.isEmpty())
 		{
-			this.freeConnctions();
+			this.freeNodes();
 			System.out.println("Im dieing(node)");
 		}
 		parent.removeLayer(this);
 		this.setParent(null);
 	}
-	private boolean isEmpty() {
-		// TODO Auto-generated method stub
+	private boolean isEmpty()
+	{
+		if(this.nodes.size()>0)
+		{
+			return true;
+		}
 		return false;
 	}
 }

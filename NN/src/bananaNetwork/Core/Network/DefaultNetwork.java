@@ -1,50 +1,49 @@
 package bananaNetwork.Core.Network;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class DefaultNetwork extends Network
 {
-	DefaultNetwork(int netid, double[] maininput)
+	DefaultNetwork(int netid)
 	{
-		super(netid, maininput);
+		super(netid);
 	}
-	DefaultNetwork(int netid, double[] maininput, String setting) 
+	DefaultNetwork(int netid, String setting) 
 	{
-		super(netid, maininput, setting);
-		initNetwork(setting);
+		super(netid, setting);
 		connectNetwork();
 		findOutputNodes();
 		findInputNodes();
-		sendNetworkInput(maininput);
-		runNetwork();
 	}
-	DefaultNetwork(ArrayList<Integer[]> con, Path from, int netid, double[] maininput)
+	DefaultNetwork(ArrayList<Integer[]> con, int netid)
 	{
-		super(con, from, netid, maininput);
+		super(con, netid);
+		connectNetwork();
+		findOutputNodes();
+		findInputNodes();
 		
 	}
-	public void initNetwork(String s)
-	{
-		String[] layersST = s.split("_");
-		for (int i = 0; i < layersST.length; i++) 
-		{
-			createLayer(i, Integer.parseInt(layersST[i]));
-		}
-		
-	}
+	//Needs cheaking
 	public void connectNetwork()
 	{
-		defaultStructure(super.getLayers().get(0), super.getLayers().get(1));
-		defaultStructure(super.getLayers().get(1), super.getLayers().get(2));
-	}
-	public void defaultStructure(Layer in, Layer out)
-	{
-		for (int i = 0; i < in.getNodes().size(); i++) 
+		int min=0;
+		Layer temp = null;
+		Layer temp1 = null;
+		while(min<super.getLayers().size()-1)
+		for(int index=0; index < super.getLayers().size();index++)
 		{
-			for (int j = 0; j < out.getNodes().size(); j++) 
+			if(super.getLayers().get(index).getID()==min)
 			{
-				createConnection(in.getNodes().get(i),out.getNodes().get(j));
+				temp=super.getLayers().get(index);
+			}
+			if(super.getLayers().get(index).getID()==min+1)
+			{
+				temp1=super.getLayers().get(index);
+			}
+			if(temp!=null && temp1!=null)
+			{
+				connectAllLayer(temp,temp1);
+				min++;
 			}
 		}
 	}

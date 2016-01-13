@@ -10,30 +10,27 @@ public abstract class Network
 {
 
 	private int ID;
-	private Path path, clone;
+	private Path path;
 	private ArrayList<Layer> layers = new ArrayList<Layer>();
 	private ArrayList<Node> inputNodes = new ArrayList<Node>();
 	private ArrayList<Node> outputNodes = new ArrayList<Node>();
-	Network(int netid, double[] maininput)
+	Network(int netid)
 	{
 		setID(netid);
 		setPath();
 		
 	}
-	Network(ArrayList<Integer[]> con, Path from, int netid, double[] maininput)
+	Network(ArrayList<Integer[]> con, int netid)
 	{
 		setID(netid);
 		setPath();
-		setClone(from);
 		initNetwork(con);
-		
-		
 	}
-	Network(int netid, double[] maininput, String setting)
+	Network(int netid, String setting)
 	{
 		setID(netid);
 		setPath();
-		///initNetwork(setting);
+		initNetwork(setting);
 	}
 	
 	public int getID() {
@@ -58,12 +55,7 @@ public abstract class Network
 	{
 		this.path = Paths.get("src\\main\\network"+ID);
 	}
-	public Path getClone() {
-		return clone;
-	}
-	public void setClone(Path clone) {
-		this.clone = clone;
-	}
+
 	//=====================================================//
 	public void onBoardUpdate(double[] maininput)
 	{
@@ -132,10 +124,6 @@ public abstract class Network
 	{
 		this.layers.add(new Layer(layerid, nl, this));
 	}
-	public void createLayer(int layerid, int nl, Path from)
-	{
-		this.layers.add(new Layer(layerid,nl, this, from));
-	}
 	public void removeLayer(int i)
 	{
 		layers.remove(i);
@@ -174,14 +162,17 @@ public abstract class Network
 	{
 		outputNodes.remove(n);
 	}
-
-	
-	public void initNetwork()
+	public void connectAllLayer(Layer in, Layer out)
 	{
-	
-		
+		for (int i = 0; i < in.getNodes().size(); i++) 
+		{
+			for (int j = 0; j < out.getNodes().size(); j++) 
+			{
+				createConnection(in.getNodes().get(i),out.getNodes().get(j));
+			}
+		}
 	}
-	
+
 	public void initNetwork(ArrayList<Integer[]> con)
 	{
 		for (int i = 0; i < con.size(); i++) 
@@ -190,5 +181,14 @@ public abstract class Network
 		}
 		
 	}	
+	public void initNetwork(String s)
+	{
+		String[] layersST = s.split("_");
+		for (int i = 0; i < layersST.length; i++) 
+		{
+			createLayer(i, Integer.parseInt(layersST[i]));
+		}
+		
+	}
 
 }
