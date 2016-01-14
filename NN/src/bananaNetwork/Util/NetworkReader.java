@@ -39,14 +39,9 @@ public class NetworkReader
 						//System.out.println(temp.toString().split("\\\\")[temp.toString().split("\\\\").length-1].split("_")[0]);
 						ntk.getLayers().get(j).createNode(Integer.parseInt(temp.toString().split("\\\\")[temp.toString().split("\\\\").length-1].split("_")[0]));
 					}
-					
-					
 				}
 			}
-			
-			
 		}
-		//runReader(ntk);
 	}
 
 	public Path getCopyFrom() {
