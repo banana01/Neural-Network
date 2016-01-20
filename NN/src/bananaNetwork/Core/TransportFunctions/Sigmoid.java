@@ -1,6 +1,6 @@
-package bananaNetwork.Core.Functions;
+package bananaNetwork.Core.TransportFunctions;
 
-public class Sigmoid extends Function 
+public class Sigmoid extends TransportFunction 
 {
 	private double slope = 1d; 
 	public Sigmoid(double slop)

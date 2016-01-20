@@ -10,7 +10,7 @@ public class NetworkConstructor
 	int fromnetworkid = 5;
 	File fromnetwork = new File("src\\main\\network"+fromnetworkid);
 	File[] layers;
-	NetworkConstructor()
+	public NetworkConstructor()
 	{
 		
 	}

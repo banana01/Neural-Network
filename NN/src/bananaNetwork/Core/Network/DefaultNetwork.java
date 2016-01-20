@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class DefaultNetwork extends Network
 {
-	DefaultNetwork(int netid)
+	public DefaultNetwork(int netid)
 	{
 		super(netid);
 	}
-	DefaultNetwork(int netid, String setting) 
+	public DefaultNetwork(int netid, String setting) 
 	{
 		super(netid, setting);
 		connectNetwork();

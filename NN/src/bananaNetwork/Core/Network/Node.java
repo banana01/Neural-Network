@@ -1,6 +1,6 @@
 package bananaNetwork.Core.Network;
 
-import bananaNetwork.Core.Functions.*;
+import bananaNetwork.Core.TransportFunctions.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -168,7 +168,7 @@ public class Node
 		}
 		return null;
 	}
-	public void runNode(Function function)
+	public void runNode(TransportFunction function)
 	{
 		if(!inputConnections.isEmpty())
 		{

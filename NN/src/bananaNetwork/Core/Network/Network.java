@@ -3,7 +3,7 @@ package bananaNetwork.Core.Network;
 import java.util.ArrayList;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import bananaNetwork.Core.Functions.Sigmoid;;
+import bananaNetwork.Core.TransportFunctions.Sigmoid;;
 
 
 public abstract class Network
