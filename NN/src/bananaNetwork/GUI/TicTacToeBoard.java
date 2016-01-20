@@ -16,6 +16,8 @@ import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
 
 public class TicTacToeBoard extends JPanel implements ActionListener
 {
@@ -25,38 +27,48 @@ public class TicTacToeBoard extends JPanel implements ActionListener
 	 */
 	private int temp1;
 	JButton[] buttons;
-	int[] board = new int[9];
+	int[] board = {0,0,0,0,0,0,0,0,0};
 	BufferedImage imgx, imgo, imgb;
-    ImageIcon iconx, icono, iconb; 
+    ImageIcon iconx, icono, iconb;
+    JLabel Turnlabel;
+    boolean turn = true;
 	public TicTacToeBoard(Path x, Path o, Path empty) throws IOException 
 	{
 		imgx = ImageIO.read(new File(x.toString()));
 		iconx = new ImageIcon(imgx.getScaledInstance(128, 128, Image.SCALE_SMOOTH));
-		imgo = ImageIO.read(new File(x.toString()));
-		icono = new ImageIcon(imgx.getScaledInstance(128, 128, Image.SCALE_SMOOTH));
-		imgb = ImageIO.read(new File(x.toString()));
-		iconb = new ImageIcon(imgx.getScaledInstance(128, 128, Image.SCALE_SMOOTH));
-		setLayout(new GridLayout(3, 3, 0, 0));
+		imgo = ImageIO.read(new File(o.toString()));
+		icono = new ImageIcon(imgo.getScaledInstance(128, 128, Image.SCALE_SMOOTH));
+		imgb = ImageIO.read(new File(empty.toString()));
+		iconb = new ImageIcon(imgb.getScaledInstance(128, 128, Image.SCALE_SMOOTH));
+		setLayout(new BorderLayout(0, 0));
+		
+		Turnlabel = new JLabel("true");
+		add(Turnlabel, BorderLayout.NORTH);
+		
+		JPanel gamepanel = new JPanel();
+		add(gamepanel, BorderLayout.CENTER);
+		gamepanel.setLayout(new GridLayout(3, 3, 0, 0));
 		buttons = new JButton[9];
 		for (int i = 0; i < buttons.length; i++) 
 		{
 			buttons[i] = MyFactory.createBoardPosButton(iconb);
 			buttons[i].setName(""+i);
-			board[i] = 0;
-			add(buttons[i]);
+			gamepanel.add(buttons[i]);
 			buttons[i].addActionListener(this);
 		}
+		//repaint();
 		
 	}
 	public void updateButtons()
 	{
-		for (temp1 = 0; temp1 < buttons.length-1; temp1++) 
+		for (temp1 = 0; temp1 < buttons.length; temp1++) 
 		{
+			//System.out.println(temp1);
 			if(board[temp1] == 1)
 			{
 				buttons[temp1].setIcon(iconx);
 			}
-			if(board[temp1] == -1)
+			else if(board[temp1] == -1)
 			{
 				buttons[temp1].setIcon(icono);
 			}
@@ -67,22 +79,33 @@ public class TicTacToeBoard extends JPanel implements ActionListener
 			
 		}
 	}
-	public void paint(Graphics g)
+	public void paintComponent(Graphics g)
 	{
-		updateButtons();
+		super.paintComponent(g);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		JButton temp = (JButton) e.getSource();
-		modifyBoard(Integer.parseInt(temp.getName()), 1);
-		repaint();
-		System.out.println(board[Integer.parseInt(temp.getName())]);
 		
+		JButton temp = (JButton) e.getSource();
+		if(turn == true)
+		{
+			modifyBoard(Integer.parseInt(temp.getName()), 1);
+			turn = false;
+		}
+		else
+		{
+			modifyBoard(Integer.parseInt(temp.getName()), -1);
+			turn = true;
+		}
+		Turnlabel.setText(Boolean.toString(turn));
+		updateButtons();
+		repaint();
+
 	}
 	public void modifyBoard(int loc, int type)
 	{
-		if(loc == 0)
+		if(board[loc] == 0)
 		{
 			board[loc] = type;
 		}
