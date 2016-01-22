@@ -86,29 +86,38 @@ public class TicTacToeBoard extends JPanel implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
-		
 		JButton temp = (JButton) e.getSource();
 		if(turn == true)
 		{
-			modifyBoard(Integer.parseInt(temp.getName()), 1);
-			turn = false;
+			if(modifyBoard(Integer.parseInt(temp.getName()), 1))
+			{
+				turn = false;
+			}
+			
+			
 		}
 		else
 		{
-			modifyBoard(Integer.parseInt(temp.getName()), -1);
-			turn = true;
+			if(modifyBoard(Integer.parseInt(temp.getName()), -1))
+			{
+				turn = true;
+			}
+			
+			
 		}
 		Turnlabel.setText(Boolean.toString(turn));
 		updateButtons();
 		repaint();
 
 	}
-	public void modifyBoard(int loc, int type)
+	public boolean modifyBoard(int loc, int type)
 	{
 		if(board[loc] == 0)
 		{
 			board[loc] = type;
+			return true;
 		}
+		return false;
 	}
 
 }
