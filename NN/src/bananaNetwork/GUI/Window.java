@@ -91,6 +91,8 @@ public class Window {
 		try {
 			TicTacToeBoard TTTB= new TicTacToeBoard(Paths.get("src\\bananaNetwork\\Assets\\iconx.png"),Paths.get("src\\bananaNetwork\\Assets\\icono.png"),Paths.get("src\\bananaNetwork\\Assets\\iconb.png"));
 			mainPanel.add(TTTB);
+			TTTB.initButtons();
+			//System.out.println(TTTB.getButtons()[1].getX());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
