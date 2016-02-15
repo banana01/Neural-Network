@@ -131,15 +131,20 @@ public class TicTacToeBoard extends JPanel implements ActionListener
 		{
 			if(modifyBoard(Integer.parseInt(temp.getName()), 1))
 			{
+				
 				turn = false;
+				temp.setType(1);
 			}
+			
 		}
 		else
 		{
 			if(modifyBoard(Integer.parseInt(temp.getName()), -1))
 			{
 				turn = true;
+				temp.setType(-1);
 			}
+			
 			
 			
 		}
@@ -151,7 +156,24 @@ public class TicTacToeBoard extends JPanel implements ActionListener
 		{
 			Turnlabel.setText("O's Turn!");
 		}
+		try {
+			temp.onChange();
+		} catch (IOException e1) {
+		}
+		Dimension size = temp.getSize();
+        Insets insets = temp.getInsets();
+        size.width -= insets.left + insets.right;
+        size.height -= insets.top + insets.bottom;
+        if (size.width > size.height) {
+            size.width = -1;
+        } else {
+            size.height = -1;
+        }
+		Image scaled = temp.getImg().getScaledInstance(size.width, size.height, java.awt.Image.SCALE_SMOOTH);
+		temp.setIcon(new ImageIcon(scaled));
+		
 		repaint();
+	
 
 	}
 	public boolean modifyBoard(int loc, int type)

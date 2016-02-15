@@ -43,19 +43,13 @@ public class TTTButton extends JButton
 		setE(e);
 		setXL(x);
 		setType(t);
-		
-	                    img = ImageIO.read(o.toFile());
+	    img = ImageIO.read(e.toFile());
 
-	                    
-	                   
-	                  // self.setIcon(new ImageIcon(ImageIO.read(o.toFile())));
 
 	}
 	public void initIcons() throws IOException
 	{
 		img = ImageIO.read(e.toFile());
-		//icon = new ImageIcon(img.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
-		icon = new ImageIcon(img.getScaledInstance(10, 10, Image.SCALE_SMOOTH));
 	}
 	public Path getO() {
 		return o;
@@ -107,6 +101,6 @@ public class TTTButton extends JButton
 		{
 			img = ImageIO.read(e.toFile());
 		}
-		icon = new ImageIcon(img.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
+		//icon = new ImageIcon(img.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH));
 	}
 }

@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import java.awt.Color;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 
 import bananaNetwork.Core.Network.DefaultNetwork;
 import bananaNetwork.Core.Network.Network;
@@ -24,14 +25,14 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.awt.FlowLayout;
+import java.awt.CardLayout;
 
 public class Window {
 
 	private JFrame frame;
-	DisplayManager DM;
+	NeuralNetworkDisplay DM;
 	JPanel mainPanel = new JPanel();
-	JPanel[] layerPanels;
-	JButton[] nodeButtons;
+
 	int[] teacher1 = {0,0};
 	int[] teacher2 = {0,0};
 	float[] HNV = new float[27];
@@ -82,16 +83,23 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.X_AXIS));
 		frame.getContentPane().add(mainPanel);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		//JButton btnNewButton = MyFactory.createNODEButton();
 		//frame.getContentPane().add(btnNewButton);
 		//===========================================================================
-		
+		nc = new DefaultNetwork(5, "9_27_9");
 		try {
-			TicTacToeBoard TTTB= new TicTacToeBoard(Paths.get("src\\bananaNetwork\\Assets\\iconx.png"),Paths.get("src\\bananaNetwork\\Assets\\icono.png"),Paths.get("src\\bananaNetwork\\Assets\\iconb.png"));
-			mainPanel.add(TTTB);
+			mainPanel.setLayout(new CardLayout(0, 0));
+			JTabbedPane JTP = new JTabbedPane();
+			mainPanel.add(JTP);
+			NeuralNetworkDisplay NND = new NeuralNetworkDisplay(nc);
+			TicTacToeBoard TTTB= new TicTacToeBoard(Paths.get("src\\bananaNetwork\\Assets\\iconb.png"),Paths.get("src\\bananaNetwork\\Assets\\icono.png"),Paths.get("src\\bananaNetwork\\Assets\\iconx.png"));
+			JTP.addTab("Board!", TTTB);
+			JTP.addTab("NN!", NND);
+			//mainPanel.add(TTTB, "name_22006726515848");
+			NND.init();
 			TTTB.initButtons();
+			
 			//System.out.println(TTTB.getButtons()[1].getX());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -123,32 +131,5 @@ public class Window {
 		drawNodes();*/
 		
 	}
-	public void drawLayers()
-	{
-		layerPanels = new JPanel[DM.getLayersSize()];
-		for (int i = 0; i < layerPanels.length; i++) 
-		{
-			layerPanels[i] = new JPanel();
-			mainPanel.add(layerPanels[i]);
-		}
-	}
-	public void drawNodes()
-	{
-		int nod = 0;
-		for (int i = 0; i < DM.getNodes().size(); i++) 
-		{
-			nod += DM.getNodes().get(i).length;
-		}
-		nodeButtons = new JButton[nod];
-		for (int i = 0; i < DM.getLayersSize(); i++) 
-		{
-			
-			for (int j = 0; j < DM.getNodes().get(i).length; j++) 
-			{
-				layerPanels[i].add(MyFactory.createNODEButton(DM.getNodes().get(i)[j]));
-			}
-			
-		}
-		
-	}
+	
 }
