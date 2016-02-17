@@ -13,9 +13,9 @@ public final class MyFactory {
 	/**
 	 * @wbp.factory
 	 */
-	public static JButton createNODEButton(Node n) 
+	public static GUINode createNODEButton(Node n) 
 	{
-		JButton button = new JButton("NODE" + n.getID());
+		GUINode button = new GUINode(n);
 		button.setForeground(Color.red);
 		return button;
 	}

@@ -1,4 +1,4 @@
-package bananaNetwork.GUI;
+ package bananaNetwork.GUI;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -29,14 +29,10 @@ public class TicTacToeBoard extends JPanel implements ActionListener
 	/**
 	 * Create the panel.
 	 */
-	private int temp1;
 	TTTButton[] buttons;
 	int[] board = {0,0,0,0,0,0,0,0,0};
-	BufferedImage imgx, imgo, imgb;
-    ImageIcon iconx, icono, iconb;
     JLabel Turnlabel;
     boolean turn = true;
-    int buW, buH;
     Path x,o,e;
 	public TicTacToeBoard(Path empty, Path o, Path x) throws IOException 
 	{
