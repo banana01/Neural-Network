@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import bananaNetwork.Core.Network.Layer;
@@ -12,12 +13,14 @@ import bananaNetwork.Core.Network.Node;
 import javax.swing.BoxLayout;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.JSplitPane;
 
 public class NeuralNetworkDisplay extends JPanel  implements MouseListener
 {
@@ -25,13 +28,27 @@ public class NeuralNetworkDisplay extends JPanel  implements MouseListener
 	JPanel[] layerPanels;
 	JPanel[] layerSubPanels;
 	JButton[] nodeButtons;
+	JSplitPane splitPane;
+	JLayeredPane NNMap;
+	JPanel test;
+	ConnectionsLayer CL;
 	ArrayList<Layer> layers = new ArrayList<Layer>();
 	ArrayList<Node[]> nodes = new ArrayList<Node[]>();
 	public NeuralNetworkDisplay(Network ntk)
 	{
 		setNtk(ntk);
 		parseNetworkDesign();
-		setLayout(new GridLayout(layers.size(),1,0,0));
+		splitPane = new JSplitPane();
+		CL = new ConnectionsLayer();
+		NNMap = new JLayeredPane();
+		test = new JPanel();
+		
+		NNMap.setLayout(new GridLayout(3,1,5,5));
+		CL.setBounds(NNMap.getX(), NNMap.getY(), NNMap.getWidth(), NNMap.getHeight());
+		NNMap.add(CL);
+		splitPane.setRightComponent(NNMap);
+		add(splitPane);
+		
 	}
 	public void init()
 	{
@@ -54,6 +71,10 @@ public class NeuralNetworkDisplay extends JPanel  implements MouseListener
 	}
 	public void setNtk(Network ntk) {
 		this.ntk = ntk;
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		
+		 
+		
 		
 	}
 	public ArrayList<Layer> getLayers() {
@@ -97,7 +118,7 @@ public class NeuralNetworkDisplay extends JPanel  implements MouseListener
 			layerSubPanels[i].setLayout(new GridLayout(3,5,5,5));
 			layerPanels[i].add(new JLabel("Layer::"+i));
 			layerPanels[i].add(layerSubPanels[i]);
-			add(layerPanels[i]);
+			NNMap.add(layerPanels[i]);
 		}
 	}
 	public void drawNodes()
