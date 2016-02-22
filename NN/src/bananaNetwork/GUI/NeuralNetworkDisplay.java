@@ -22,7 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JSplitPane;
 
-public class NeuralNetworkDisplay extends JPanel  implements MouseListener
+public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 {
 	private Network ntk;
 	JPanel[] layerPanels;
@@ -98,12 +98,6 @@ public class NeuralNetworkDisplay extends JPanel  implements MouseListener
 	}
 	
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-		
-	}
-	
 	
 	
 	public void drawLayers()
@@ -142,25 +136,6 @@ public class NeuralNetworkDisplay extends JPanel  implements MouseListener
 		
 	}
 	
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 }
