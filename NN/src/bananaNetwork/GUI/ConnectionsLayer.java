@@ -7,12 +7,15 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class ConnectionsLayer extends Component implements MouseListener
+import javax.swing.JPanel;
+
+public class ConnectionsLayer extends JPanel implements MouseListener
 {
 	private Point point;
 	public ConnectionsLayer()
 	{
-		
+		setOpaque(false);
+		//setBackground(new Color(0,0,0,0));
 	}
 
 	
@@ -21,8 +24,12 @@ public class ConnectionsLayer extends Component implements MouseListener
 	
 	protected void paintComponent(Graphics g) 
 	{
-	        g.setColor(Color.red);
-	        g.fillOval(point.x - 10, point.y - 10, 20, 20);
+		super.paintComponent(g);
+        int x = 10;
+        int y = 10;
+        int width = getWidth() - 20;
+        int height = getHeight() - 20;
+        g.drawArc(x, y, width, height, 0, 360);
 	}
 	    
 	 

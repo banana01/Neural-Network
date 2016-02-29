@@ -25,6 +25,7 @@ import javax.swing.JSplitPane;
 public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 {
 	private Network ntk;
+	JPanel layerContainer;
 	JPanel[] layerPanels;
 	JPanel[] layerSubPanels;
 	JButton[] nodeButtons;
@@ -39,14 +40,15 @@ public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 		setNtk(ntk);
 		parseNetworkDesign();
 		splitPane = new JSplitPane();
-		CL = new ConnectionsLayer();
 		NNMap = new JLayeredPane();
 		test = new JPanel();
-		
-		NNMap.setLayout(new GridLayout(3,1,5,5));
-		CL.setBounds(NNMap.getX(), NNMap.getY(), NNMap.getWidth(), NNMap.getHeight());
-		NNMap.add(CL);
+		CL = new ConnectionsLayer();
+		layerContainer = new JPanel();
+		layerContainer.setLayout(new GridLayout(3,1,0,0));
 		splitPane.setRightComponent(NNMap);
+		NNMap.setLayout(new BorderLayout(0, 0));
+		NNMap.add(layerContainer, 0);
+		NNMap.add(CL, 1);
 		add(splitPane);
 		
 	}
@@ -72,7 +74,7 @@ public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 	public void setNtk(Network ntk) {
 		this.ntk = ntk;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		
+	
 		 
 		
 		
@@ -99,7 +101,6 @@ public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 	
 	
 	
-	
 	public void drawLayers()
 	{
 		layerPanels = new JPanel[getLayersSize()];
@@ -112,7 +113,7 @@ public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 			layerSubPanels[i].setLayout(new GridLayout(3,5,5,5));
 			layerPanels[i].add(new JLabel("Layer::"+i));
 			layerPanels[i].add(layerSubPanels[i]);
-			NNMap.add(layerPanels[i]);
+			layerContainer.add(layerPanels[i]);
 		}
 	}
 	public void drawNodes()
