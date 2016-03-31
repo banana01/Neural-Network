@@ -48,7 +48,7 @@ public class NeuralNetworkDisplay extends JPanel  //implements MouseListener
 		splitPane.setRightComponent(NNMap);
 		NNMap.setLayout(new BorderLayout(0, 0));
 		NNMap.add(layerContainer, 0);
-		NNMap.add(CL, 1);
+		//NNMap.add(CL, 1);
 		add(splitPane);
 		
 	}

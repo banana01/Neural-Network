@@ -92,14 +92,13 @@ public class Window {
 			mainPanel.setLayout(new CardLayout(0, 0));
 			JTabbedPane JTP = new JTabbedPane();
 			mainPanel.add(JTP);
-			NeuralNetworkDisplay NND = new NeuralNetworkDisplay(nc);
+			NeuralNetworkDisplayV2 NND = new NeuralNetworkDisplayV2(nc);
 			TicTacToeBoard TTTB= new TicTacToeBoard(Paths.get("src\\bananaNetwork\\Assets\\iconb.png"),Paths.get("src\\bananaNetwork\\Assets\\icono.png"),Paths.get("src\\bananaNetwork\\Assets\\iconx.png"));
 			JTP.addTab("Board!", TTTB);
 			JTP.addTab("NN!", NND);
 			//mainPanel.add(TTTB, "name_22006726515848");
-			NND.init();
+			//NND.init();
 			TTTB.initButtons();
-			
 			//System.out.println(TTTB.getButtons()[1].getX());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

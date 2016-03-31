@@ -1,5 +1,6 @@
 package bananaNetwork.GUI;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -7,31 +8,56 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JLayer;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import bananaNetwork.Core.Network.Layer;
 import bananaNetwork.Core.Network.Network;
 import bananaNetwork.Core.Network.Node;
+import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
 
-public class NeuralNetworkDisplayV2 
+public class NeuralNetworkDisplayV2 extends JPanel
 {
 	JSplitPane splitPane;
 	JPanel NNMap;
 	JPanel layerContainer;
 	JPanel[] layerPanels;
+	JPanel[] layerSubPanels;
+	ToolBar tb;
 	
 	ArrayList<Layer> layers = new ArrayList<Layer>();
 	ArrayList<Node[]> nodes = new ArrayList<Node[]>();
 	
 	public NeuralNetworkDisplayV2(Network ntk)
 	{
+		//Set layout of NND to store the splitPane
+		setLayout(new BorderLayout(0, 0));
+		
+		//init stuff to stop null pointers and serve as debug in case of failure
 		splitPane = new JSplitPane();
 		NNMap = new JPanel();
 		layerContainer = new JPanel();
+		tb = new ToolBar();
+		
+		//add split pane
+		add(splitPane);
+		
+		//parse the input network and prepare JPanels
 		parseNetworkStruct(ntk);
 		drawLayers();
 		drawNodes();
+		
+		//setup lower level jpanels layouts
+		NNMap.setLayout(new BorderLayout(0, 0));
+		layerContainer.setLayout(new GridLayout(3,5,5,5));
+		
+		
+		//add the comonents to the window
+		NNMap.add(layerContainer);
+		splitPane.setRightComponent(NNMap);
+		splitPane.setLeftComponent(tb);
 		/*
 		 * VERY IMPORTANT MILES LOOK AT THIS COMMENT YOU NERD
 		 * THE LAYERUI CLASS FROM THE DEMO NEEDS!! TO BE THE CONNECTIONS LAYER AS IT CAN BE TRANSPARENT AND DETECT MOUSE STUFF
@@ -41,10 +67,20 @@ public class NeuralNetworkDisplayV2
 		
 		
 	}
+	//create the over layer that holds connections
+	private JLayer<JComponent> createLayerUI()
+	{
+		ConnectionsLayer cLayer = new ConnectionsLayer();
+		JPanel panel = new JPanel();
+        panel.add(new JButton("JButton"));
+        return new JLayer<JComponent>(panel, cLayer);
+	}
+	//dont remember what this does might be unessasarry will test soon might be used to clean up code
 	private void drawMap()
 	{
 		
 	}
+	// parse the network into its layers and nodes
 	private void parseNetworkStruct(Network ntk)
 	{
 		for (int i = 0;i < ntk.getLayers().size(); i++) 
@@ -56,6 +92,7 @@ public class NeuralNetworkDisplayV2
 			nodes.add(layers.get(i).getNodes().toArray(new Node[layers.get(i).getNodes().size()]));
 		}
 	}
+	//put nodes in sublayers
 	private void drawNodes()
 	{
 		int nod = 0;
@@ -68,19 +105,24 @@ public class NeuralNetworkDisplayV2
 			
 			for (int j = 0; j < getNodes().get(i).length; j++) 
 			{
-				layerPanels[i].add(MyFactory.createNODEButton(getNodes().get(i)[j]));
+				layerSubPanels[i].add(MyFactory.createNODEButton(getNodes().get(i)[j]));
 			}
 			
 		}
 	}
+	//create layers that hold labels and sublayers and fill them
 	private void drawLayers()
 	{
 		layerPanels = new JPanel[getLayersSize()];
+		layerSubPanels = new JPanel[getLayersSize()];
 		for (int i = 0; i < layerPanels.length; i++) 
 		{
 			layerPanels[i] = new JPanel();
+			layerSubPanels[i] = new JPanel();
 			layerPanels[i].setLayout(new FlowLayout());
+			layerSubPanels[i].setLayout(new GridLayout(3,5,5,5));
 			layerPanels[i].add(new JLabel("Layer::"+i));
+			layerPanels[i].add(layerSubPanels[i]);
 			layerContainer.add(layerPanels[i]);
 		}
 	}
@@ -92,7 +134,7 @@ public class NeuralNetworkDisplayV2
 	
 	
 	
-	
+	//=========================================================GETTERS/SETTERS
 	
 	
 	
