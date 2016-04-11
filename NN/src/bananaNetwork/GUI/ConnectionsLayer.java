@@ -21,19 +21,21 @@ public class ConnectionsLayer extends LayerUI<JComponent>
 	{
 		//setBackground(new Color(0,0,0,0));
 	}
+	
 	public void paint(Graphics g, JComponent c) {
         // paint the layer as is
         super.paint(g, c);
         // fill it with the translucent green
         g.setColor(new Color(0, 128, 0, 128));
-        g.fillRect(0, 0, 150, 150);
         g.fillRect(0, 0, c.getWidth(), c.getHeight());
     }
 
     public void installUI(JComponent c) {
         super.installUI(c);
         // enable mouse motion events for the layer's subcomponents
-        ((JLayer) c).setLayerEventMask(AWTEvent.MOUSE_MOTION_EVENT_MASK);
+//        ((JLayer) c).setLayerEventMask(AWTEvent.MOUSE_MOTION_EVENT_MASK);
+        ((JLayer) c).setLayerEventMask(AWTEvent.MOUSE_EVENT_MASK);
+        
     }
 
     public void uninstallUI(JComponent c) {

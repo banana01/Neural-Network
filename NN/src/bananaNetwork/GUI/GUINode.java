@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import bananaNetwork.Core.Network.Node;
 
-public class GUINode extends JPanel
+public class GUINode extends JPanel implements MouseListener
 {
 	private Node nd;
 	private String TT;
@@ -47,6 +47,51 @@ public class GUINode extends JPanel
 
 	    for (Component cc : c.getComponents())
 	            setToolTipRecursively((JComponent) cc, text);
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		System.out.println("THIS IS AN EVENT"+e);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

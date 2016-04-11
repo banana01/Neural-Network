@@ -2,6 +2,7 @@ package bananaNetwork.GUI;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayer;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.plaf.LayerUI;
 
 import bananaNetwork.Core.Network.Layer;
 import bananaNetwork.Core.Network.Network;
@@ -22,10 +24,11 @@ public class NeuralNetworkDisplayV2 extends JPanel
 {
 	JSplitPane splitPane;
 	JPanel NNMap;
-	JPanel layerContainer;
+	JPanel layerContainer, toplevelPanel;
 	JPanel[] layerPanels;
 	JPanel[] layerSubPanels;
 	ToolBar tb;
+	ConnectionsLayer cl;
 	
 	ArrayList<Layer> layers = new ArrayList<Layer>();
 	ArrayList<Node[]> nodes = new ArrayList<Node[]>();
@@ -40,6 +43,9 @@ public class NeuralNetworkDisplayV2 extends JPanel
 		NNMap = new JPanel();
 		layerContainer = new JPanel();
 		tb = new ToolBar();
+		cl = new ConnectionsLayer();
+		toplevelPanel = new JPanel();
+		
 		
 		//add split pane
 		add(splitPane);
@@ -52,11 +58,13 @@ public class NeuralNetworkDisplayV2 extends JPanel
 		//setup lower level jpanels layouts
 		NNMap.setLayout(new BorderLayout(0, 0));
 		layerContainer.setLayout(new GridLayout(3,5,5,5));
+		toplevelPanel.setLayout(new BorderLayout(0,0));
 		
 		
 		//add the comonents to the window
 		NNMap.add(layerContainer);
-		splitPane.setRightComponent(NNMap);
+		toplevelPanel.add(createLayer(NNMap));
+		splitPane.setRightComponent(toplevelPanel);
 		splitPane.setLeftComponent(tb);
 		/*
 		 * VERY IMPORTANT MILES LOOK AT THIS COMMENT YOU NERD
@@ -67,18 +75,14 @@ public class NeuralNetworkDisplayV2 extends JPanel
 		
 		
 	}
-	//create the over layer that holds connections
-	private JLayer<JComponent> createLayerUI()
-	{
-		ConnectionsLayer cLayer = new ConnectionsLayer();
-		JPanel panel = new JPanel();
-        panel.add(new JButton("JButton"));
-        return new JLayer<JComponent>(panel, cLayer);
-	}
 	//dont remember what this does might be unessasarry will test soon might be used to clean up code
-	private void drawMap()
+	public void paintComponent(Graphics w)
 	{
-		
+		NNMap.setSize(toplevelPanel.getSize());
+		lineDraw();
+	}
+	public void lineDraw()
+	{
 	}
 	// parse the network into its layers and nodes
 	private void parseNetworkStruct(Network ntk)
@@ -126,7 +130,11 @@ public class NeuralNetworkDisplayV2 extends JPanel
 			layerContainer.add(layerPanels[i]);
 		}
 	}
-	
+	public JLayer<JComponent> createLayer(JPanel map)
+	{
+		LayerUI<JComponent> layerUI = new ConnectionsLayer();
+		return new JLayer<JComponent>(map, layerUI);
+	}
 	
 	
 	
