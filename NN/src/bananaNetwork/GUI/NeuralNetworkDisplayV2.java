@@ -1,9 +1,13 @@
 package bananaNetwork.GUI;
 
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.MouseInfo;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -20,7 +24,7 @@ import bananaNetwork.Core.Network.Node;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 
-public class NeuralNetworkDisplayV2 extends JPanel
+public class NeuralNetworkDisplayV2 extends JPanel implements ActionListener
 {
 	JSplitPane splitPane;
 	JPanel NNMap;
@@ -99,17 +103,21 @@ public class NeuralNetworkDisplayV2 extends JPanel
 	//put nodes in sublayers
 	private void drawNodes()
 	{
-		int nod = 0;
-		for (int i = 0; i < getNodes().size(); i++) 
-		{
-			nod += getNodes().get(i).length;
-		}
+		//int nod = 0;
+		JButton jb;
+		//for (int i = 0; i < getNodes().size(); i++) 
+		//{
+		//	nod += getNodes().get(i).length;
+		//}
 		for (int i = 0; i < getLayersSize(); i++) 
 		{
 			
 			for (int j = 0; j < getNodes().get(i).length; j++) 
 			{
-				layerSubPanels[i].add(MyFactory.createNODEButton(getNodes().get(i)[j]));
+				jb = MyFactory.createNODEButton(getNodes().get(i)[j]);
+				jb.setName("Node"+j);
+				layerSubPanels[i].add(jb);
+				jb.addActionListener(this);
 			}
 			
 		}
@@ -130,11 +138,21 @@ public class NeuralNetworkDisplayV2 extends JPanel
 			layerContainer.add(layerPanels[i]);
 		}
 	}
+	//create the layer with the lines and things
 	public JLayer<JComponent> createLayer(JPanel map)
 	{
 		LayerUI<JComponent> layerUI = new ConnectionsLayer();
 		return new JLayer<JComponent>(map, layerUI);
 	}
+	
+	public void actionPerformed(ActionEvent evt) 
+	{
+			System.out.println("AWEOSME"+evt.getSource());
+			cl.link((JButton)evt.getSource());
+			System.out.println(MouseInfo.getPointerInfo().getLocation());
+		
+	}
+	
 	
 	
 	
