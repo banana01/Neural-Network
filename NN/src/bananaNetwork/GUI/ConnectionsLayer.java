@@ -1,15 +1,19 @@
 package bananaNetwork.GUI;
 
 import java.awt.AWTEvent;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -22,7 +26,7 @@ import javax.swing.plaf.LayerUI;
 
 public class ConnectionsLayer extends LayerUI<JComponent>
 {
-	private Map<Point, Point> links;
+	private HashMap<Point, Point> links;
 	private JButton last;
 
 	public ConnectionsLayer()
@@ -37,14 +41,24 @@ public class ConnectionsLayer extends LayerUI<JComponent>
         // fill it with the translucent green
         g.setColor(new Color(0, 128, 0, 128));
         g.fillRect(0, 0, c.getWidth(), c.getHeight());
-        
+
+       // g.drawLine(5, 500, 500, 500);
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setPaint ( Color.BLACK );
-        for ( Point c1 : links.keySet () )
-        {
-            Point p1 = c1;
-            Point p2 = links.get(c1);
-            g2d.drawLine ( p1.x, p1.y, p2.x, p2.y );
+        //g.setPaint ( Color.BLACK );
+        g2d.setStroke(new BasicStroke(15));
+        g2d.setColor(Color.BLACK);
+        // TODO: WTF IS GOING ON HERE IT WONT GO THROUGH THE ITORATOR AND I HAVE NO IDEA WY IT WONT DO THE WHILE LOOP NORE A FOR LOOP
+        
+        Iterator it = links.entrySet().iterator();
+        while (it.hasNext()) {
+        	Map.Entry pair = (Map.Entry)it.next();
+        	System.out.println(pair.getKey());
+        	System.out.println("YOLOSWAG");
+            Point p1 = (Point) pair.getKey();
+            Point p2 = (Point) pair.getValue();
+            g2d.drawLine( (int)p1.getX(), (int)p1.getY(), (int)p2.getX(), (int)p2.getY() );
+            g2d.drawLine(5, 5, 500, 500);
+            System.out.println("YOLOSWAG");
         }
     }
 
@@ -72,6 +86,7 @@ public class ConnectionsLayer extends LayerUI<JComponent>
     		link(last.getLocation(), link.getLocation());
     		System.out.println("LINKED"+last.getName()+"AND:"+link.getName());
     		last = null;
+    		System.out.println(links.values());
     	}
     }
     public void link(Point p1, Point p2)
