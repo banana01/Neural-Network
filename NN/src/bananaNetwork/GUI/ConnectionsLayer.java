@@ -101,7 +101,8 @@ public class ConnectionsLayer extends LayerUI<JComponent>
     public void link(Point p1, Point p2)
     {
     	links.put(p1, p2);
-    	System.out.println("THIS HAPPENDED");
+    	System.out.println("Attempted to link nodes");
+    	System.out.println("hey im the map"+links.toString());
     	
     	
     }

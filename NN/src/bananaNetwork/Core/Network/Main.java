@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import bananaNetwork.Game.Game;
 import bananaNetwork.Game.Teacher;
+import bananaNetwork.Game.TrainingInterface;
 import bananaNetwork.Util.NetworkIniter;
 import bananaNetwork.Util.NetworkReader;
 import bananaNetwork.Util.NetworkWriter;
@@ -27,10 +28,10 @@ public class Main
 	public static void main(String args[])
 	{
 		Main ma = new Main();
-		g.modifyLoc(1, 2, -1);
-		g.modifyLoc(2, 2, -1);
-		g.modifyLoc(1, 1, -1);
-		g.printBoard(g.getBoard());
+		//g.modifyLoc(1, 2, -1);
+		//g.modifyLoc(2, 2, -1);
+		//g.modifyLoc(1, 1, -1);
+		//g.printBoard(g.getBoard());
 		nc = new DefaultNetwork(5);
 		try {
 			ma.ini = new NetworkIniter(nc);
@@ -53,12 +54,13 @@ public class Main
 	//	System.out.println(temp[1]);
 	//	System.out.println(g.modifyLoc(temp[0], temp[1], 1));
 		g.printBoard(g.getBoard());
-		/*g.init();
-		int count = 240000;
+		g.init();
+		int count = 1;
 		long startTime = System.nanoTime();
 		for(int i = 0; i < count; i++)
 		{
-			ma.runGame();
+			ma.teachersPlay();
+			
 		}
 		long endTime = System.nanoTime();
 		try {
@@ -69,29 +71,34 @@ public class Main
 		System.out.println(g.owin+"::O wins");
 		System.out.println(g.xwin+"::X wins");
 		System.out.println(g.cats+"::cats");
+		TrainingInterface TI = new TrainingInterface(g.gameStore.toPath(), 1);
 
 		
 		//g.printBoard(g.getBoard());
 		//nc = new Network(ma.ncr.createClass(), ma.ncr.grabFromNetwork(), 7, g.convertTo1xN());
 		//nc = new Network(5, g.convertTo1xN());
 		//System.out.println(finalout);
-		/*g.init();
-		int count = 240000;
-		long startTime = System.nanoTime();
-		for(int i = 0; i < count; i++)
-		{
-			ma.runGame();
-		}
-		long endTime = System.nanoTime();
-		try {
-			g.dump();
-		} catch (IOException e) {
-		}
-		System.out.println("Took "+(endTime - startTime) + " ns");
-		System.out.println(g.owin+"::O wins");
-		System.out.println(g.xwin+"::X wins");
-		System.out.println(g.cats+"::cats");*/
 		
+		
+		
+	}
+	public void teachersPlay()
+	{
+		while (g.leagalMove() >= 0 && g.evaluate(g.getBoard()) == 0)
+		{
+			
+			checkMove();
+			g.printBoard(g.getBoard());
+			g.storeGame();
+			if(g.evaluate(g.getBoard()) != 0)
+			{
+				break;
+			}
+			checkMoveB();
+			g.printBoard(g.getBoard());
+			g.storeGame();
+		}
+		g.clearBoard();
 		
 	}
 	public void runGame()

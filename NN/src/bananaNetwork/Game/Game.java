@@ -1,16 +1,21 @@
 package bananaNetwork.Game;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Random;
+import java.util.Scanner;
 
 import bananaNetwork.Core.Network.Main;
 
 public class Game 
 {
-	File gameStore;
+	public File gameStore;
 	File gameFolder;
 	FileWriter fwg;
 	BufferedWriter bfg;
@@ -216,15 +221,17 @@ public class Game
 			}
 			for(int i = 0; i < parsedBoard.length; i++)
 			{
-				bfg.newLine();
-				bfg.write(parsedBoard[i]);
 				
+
+				bfg.write(parsedBoard[i]);
+				bfg.newLine();
 			}
+			
+			bfg.write("---");
 			bfg.newLine();
 			if(evaluate(getBoard()) != 0)
 			{
 				
-				bfg.newLine();
 				if(evaluate(getBoard()) == 1)
 				{
 					xwin++;
@@ -241,6 +248,7 @@ public class Game
 					bfg.write("@C@");
 				}
 			}
+			bfg.flush();
 			
 			
 		} catch (IOException e) {
@@ -343,5 +351,4 @@ public class Game
 		fwg.close();
 		bfg.close();
 	}
-	
 }
