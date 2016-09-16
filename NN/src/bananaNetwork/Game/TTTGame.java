@@ -2,7 +2,7 @@ package bananaNetwork.Game;
 
 import java.util.ArrayList;
 
-public class TTTGame 
+public class TTTGame implements java.io.Serializable
 {
 	int winner;
 	ArrayList<Object[][]> boards = new ArrayList<Object[][]>();

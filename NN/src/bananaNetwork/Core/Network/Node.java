@@ -109,7 +109,7 @@ public class Node
 		while(!this.isEmpty())
 		{
 			this.freeConnctions();
-			System.out.println("Im dieing(node)");
+			System.out.println("Im dying"+this.getID());
 		}
 		parent.removeNode(this);
 		parent.getParent().removeNodeIn(this);
